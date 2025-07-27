@@ -27,7 +27,7 @@
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,255,255,0.15);
     }
-    label, select, input {
+    label, select {
       display: block;
       margin: 15px 0 5px;
       width: 100%;
@@ -98,9 +98,6 @@
     <option value="aimant">Aimants néodyme</option>
   </select>
 
-  <label for="temps">Temps estimé (heures) :</label>
-  <input type="number" id="temps" value="3">
-
   <button type="submit">Calculer le prix</button>
 </form>
 
@@ -108,7 +105,7 @@
 
 <div class="preview">
   <h3>Aperçu artistique</h3>
-  <img src="https://cdn.openai.com/dall-e-2/demos/text2image/resin_pyramid_example.jpg" alt="Aperçu objet résine">
+  <img id="previewImage" src="" alt="Aperçu objet résine">
 </div>
 
   </main>  <script>
@@ -134,20 +131,31 @@
       aimant: 4
     };
 
+    function genererImage(objet, pierres, options) {
+      // Remplacer cette URL par une image générée si souhaité avec OpenAI API
+      const imageParDefaut = {
+        pyramide: "https://raw.githubusercontent.com/OpenAI/brand/main/dall-e/asset-dall-e.png",
+        grinder: "https://via.placeholder.com/400x300?text=Grinder+Personnalisé",
+        boite: "https://via.placeholder.com/400x300?text=Boite+Crane+Resine"
+      };
+      document.getElementById("previewImage").src = imageParDefaut[objet] || imageParDefaut.pyramide;
+    }
+
     document.getElementById("resinForm").addEventListener("submit", function(e) {
       e.preventDefault();
       let objet = document.getElementById("objet").value;
       let pierres = Array.from(document.getElementById("pierres").selectedOptions).map(o => o.value);
       let options = Array.from(document.getElementById("options").selectedOptions).map(o => o.value);
-      let temps = parseFloat(document.getElementById("temps").value);
 
       let total = prixBase[objet];
       pierres.forEach(p => total += prixPierres[p] || 0);
       options.forEach(o => total += prixOptions[o] || 0);
-      total += temps * 10; // 10€ de l'heure
+      total += 10; // Forfait main-d'oeuvre
 
       document.getElementById("resultat").style.display = "block";
       document.getElementById("resultat").innerHTML = `Prix estimé : <strong>${total.toFixed(2)}€</strong>`;
+
+      genererImage(objet, pierres, options);
     });
   </script></body>
 </html>
