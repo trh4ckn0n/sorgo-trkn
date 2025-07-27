@@ -104,7 +104,7 @@
 <div id="resultat" class="result" style="display:none;"></div>
 
 <div class="preview">
-  <h3>Aperçu artistique</h3>
+  <h3>Aperçu artistique généré</h3>
   <img id="previewImage" src="" alt="Aperçu objet résine">
 </div>
 
@@ -131,14 +131,28 @@
       aimant: 4
     };
 
-    function genererImage(objet, pierres, options) {
-      // Remplacer cette URL par une image générée si souhaité avec OpenAI API
-      const imageParDefaut = {
-        pyramide: "https://raw.githubusercontent.com/OpenAI/brand/main/dall-e/asset-dall-e.png",
-        grinder: "https://via.placeholder.com/400x300?text=Grinder+Personnalisé",
-        boite: "https://via.placeholder.com/400x300?text=Boite+Crane+Resine"
-      };
-      document.getElementById("previewImage").src = imageParDefaut[objet] || imageParDefaut.pyramide;
+    function estimerTemps(pierres, options) {
+      return (pierres.length * 0.4) + (options.length * 0.3) + 1.5; // base + composants
+    }
+
+    async function genererImageDalle(prompt) {
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer VOTRE_CLE_OPENAI_ICI"
+        },
+        body: JSON.stringify({
+          model: "dall-e-3",
+          prompt: prompt,
+          n: 1,
+          size: "1024x1024"
+        })
+      });
+      const data = await response.json();
+      if (data?.data?.[0]?.url) {
+        document.getElementById("previewImage").src = data.data[0].url;
+      }
     }
 
     document.getElementById("resinForm").addEventListener("submit", function(e) {
@@ -150,12 +164,15 @@
       let total = prixBase[objet];
       pierres.forEach(p => total += prixPierres[p] || 0);
       options.forEach(o => total += prixOptions[o] || 0);
-      total += 10; // Forfait main-d'oeuvre
+
+      let temps = estimerTemps(pierres, options);
+      total += temps * 10; // 10€/h
 
       document.getElementById("resultat").style.display = "block";
-      document.getElementById("resultat").innerHTML = `Prix estimé : <strong>${total.toFixed(2)}€</strong>`;
+      document.getElementById("resultat").innerHTML = `Temps estimé : ${temps.toFixed(1)} h<br>Prix estimé : <strong>${total.toFixed(2)}€</strong>`;
 
-      genererImage(objet, pierres, options);
+      const description = `resin ${objet} with ${pierres.join(", ")} stones and ${options.join(", ")}`;
+      genererImageDalle(description);
     });
   </script></body>
 </html>
