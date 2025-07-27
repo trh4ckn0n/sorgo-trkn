@@ -2,45 +2,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Créateur d'Objets en Résine</title>
+  <title>Créateur d'Objets Résine</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #eee;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #222;
-      color: white;
-      padding: 20px;
+      background-color: #000;
+      color: #0ff;
+      padding: 30px 20px;
       text-align: center;
+      font-size: 1.8em;
+      letter-spacing: 1px;
     }
     main {
-      max-width: 800px;
-      margin: 30px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: 40px auto;
+      background: #1b1b1b;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,255,255,0.15);
     }
     label, select, input {
       display: block;
-      margin: 10px 0;
+      margin: 15px 0 5px;
       width: 100%;
+      font-size: 1em;
+      background: #111;
+      color: #0ff;
+      border: 1px solid #333;
+      padding: 10px;
+      border-radius: 4px;
     }
     button {
-      background: #444;
-      color: white;
-      padding: 10px;
+      background: #0ff;
+      color: #111;
+      padding: 12px;
       border: none;
+      border-radius: 4px;
+      font-weight: bold;
       cursor: pointer;
+      margin-top: 20px;
     }
     .result {
-      margin-top: 20px;
-      padding: 10px;
-      background: #eef;
-      border-left: 4px solid #88f;
+      margin-top: 25px;
+      padding: 20px;
+      background: #0a0a0a;
+      color: #fff;
+      border-left: 5px solid #0ff;
+      border-radius: 8px;
+    }
+    .preview {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .preview img {
+      max-width: 80%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.2);
     }
   </style>
 </head>
@@ -55,12 +78,12 @@
         <option value="pyramide">Pyramide</option>
         <option value="grinder">Grinder</option>
         <option value="boite">Boîte Tête de Mort</option>
-      </select><label for="pierres">Choisissez vos pierres (Ctrl+clic pour multiples) :</label>
+      </select><label for="pierres">Choisissez vos pierres :</label>
   <select id="pierres" multiple>
     <option value="amethyste">Améthyste</option>
     <option value="selenite">Sélénite</option>
     <option value="cristal">Cristal de roche</option>
-    <option value="oeil_de_tigre">Oeil de Tigre</option>
+    <option value="oeil_de_tigre">Œil de Tigre</option>
     <option value="pierre_de_lune">Pierre de Lune</option>
     <option value="7chakras">7 Chakras (kit)</option>
   </select>
@@ -82,6 +105,11 @@
 </form>
 
 <div id="resultat" class="result" style="display:none;"></div>
+
+<div class="preview">
+  <h3>Aperçu artistique</h3>
+  <img src="https://cdn.openai.com/dall-e-2/demos/text2image/resin_pyramid_example.jpg" alt="Aperçu objet résine">
+</div>
 
   </main>  <script>
     const prixBase = {
