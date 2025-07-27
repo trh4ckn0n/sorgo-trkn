@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créateur d'Objets en Résine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label, select, input {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+    }
+    button {
+      background: #444;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eef;
+      border-left: 4px solid #88f;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Créateur d'Objets Résine Personnalisés</h1>
+  </header>
+  <main>
+    <form id="resinForm">
+      <label for="objet">Choisissez un objet :</label>
+      <select id="objet">
+        <option value="pyramide">Pyramide</option>
+        <option value="grinder">Grinder</option>
+        <option value="boite">Boîte Tête de Mort</option>
+      </select><label for="pierres">Choisissez vos pierres (Ctrl+clic pour multiples) :</label>
+  <select id="pierres" multiple>
+    <option value="amethyste">Améthyste</option>
+    <option value="selenite">Sélénite</option>
+    <option value="cristal">Cristal de roche</option>
+    <option value="oeil_de_tigre">Oeil de Tigre</option>
+    <option value="pierre_de_lune">Pierre de Lune</option>
+    <option value="7chakras">7 Chakras (kit)</option>
+  </select>
+
+  <label for="options">Ajouts spéciaux :</label>
+  <select id="options" multiple>
+    <option value="spirale_cuivre">Spirale de cuivre</option>
+    <option value="paillettes">Fond pailleté noir</option>
+    <option value="mica">Poudre de mica</option>
+    <option value="cuivre">Poudre de cuivre</option>
+    <option value="feuille_or">Feuille d'or 24K</option>
+    <option value="aimant">Aimants néodyme</option>
+  </select>
+
+  <label for="temps">Temps estimé (heures) :</label>
+  <input type="number" id="temps" value="3">
+
+  <button type="submit">Calculer le prix</button>
+</form>
+
+<div id="resultat" class="result" style="display:none;"></div>
+
+  </main>  <script>
+    const prixBase = {
+      pyramide: 20,
+      grinder: 15,
+      boite: 25
+    };
+    const prixPierres = {
+      amethyste: 3,
+      selenite: 2,
+      cristal: 3,
+      oeil_de_tigre: 2.5,
+      pierre_de_lune: 3,
+      '7chakras': 5
+    };
+    const prixOptions = {
+      spirale_cuivre: 2,
+      paillettes: 1,
+      mica: 1.5,
+      cuivre: 1.5,
+      feuille_or: 5,
+      aimant: 4
+    };
+
+    document.getElementById("resinForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let objet = document.getElementById("objet").value;
+      let pierres = Array.from(document.getElementById("pierres").selectedOptions).map(o => o.value);
+      let options = Array.from(document.getElementById("options").selectedOptions).map(o => o.value);
+      let temps = parseFloat(document.getElementById("temps").value);
+
+      let total = prixBase[objet];
+      pierres.forEach(p => total += prixPierres[p] || 0);
+      options.forEach(o => total += prixOptions[o] || 0);
+      total += temps * 10; // 10€ de l'heure
+
+      document.getElementById("resultat").style.display = "block";
+      document.getElementById("resultat").innerHTML = `Prix estimé : <strong>${total.toFixed(2)}€</strong>`;
+    });
+  </script></body>
+</html>
